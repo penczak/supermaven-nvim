@@ -1,5 +1,11 @@
-# Supermaven Neovim Plugin
 
+# Supermaven Neovim Plugin
+FORKED FROM: https://github.com/supermaven-inc/supermaven-nvim
+
+Forked to add `polite_mode` as a configuration option.
+`polite_mode` will not provide and auto-completions until the user asks for one. This way, normal writing is not interrupted, but completion is available upon request. 
+
+# Original Description: 
 This plugin, supermaven-nvim, lets you use [Supermaven](https://supermaven.com/) in Neovim. If you encounter any issues while using supermaven-nvim, consider opening an issue or reaching out to us on [Discord](https://discord.com/invite/QQpqBmQH3w).
 
 ## Installation
