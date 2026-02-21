@@ -1,11 +1,5 @@
-
 # Supermaven Neovim Plugin
-FORKED FROM: https://github.com/supermaven-inc/supermaven-nvim
 
-Forked to add `polite_mode` as a configuration option.
-`polite_mode` will not provide and auto-completions until the user asks for one. This way, normal writing is not interrupted, but completion is available upon request. 
-
-# Original Description: 
 This plugin, supermaven-nvim, lets you use [Supermaven](https://supermaven.com/) in Neovim. If you encounter any issues while using supermaven-nvim, consider opening an issue or reaching out to us on [Discord](https://discord.com/invite/QQpqBmQH3w).
 
 ## Installation
@@ -50,6 +44,7 @@ require("supermaven-nvim").setup({
     accept_suggestion = "<Tab>",
     clear_suggestion = "<C-]>",
     accept_word = "<C-j>",
+    polite_suggestion = "<C-l>",
   },
   ignore_filetypes = { cpp = true }, -- or { "cpp", }
   color = {
@@ -59,6 +54,7 @@ require("supermaven-nvim").setup({
   log_level = "info", -- set to "off" to disable logging completely
   disable_inline_completion = false, -- disables inline completion for use with cmp
   disable_keymaps = false, -- disables built in keymaps for more manual control
+  polite_mode = false, -- disables auto-completions until requested by user. requires keymaps.polite_suggestion to be set
   condition = function()
     return false
   end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
