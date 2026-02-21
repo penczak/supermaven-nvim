@@ -22,18 +22,6 @@ M.setup = function()
     end,
   })
 
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    group = M.augroup,
-    callback = function(event)
-      local file_name = event["file"]
-      local buffer = event["buf"]
-      if not file_name or not buffer then
-        return
-      end
-      binary:on_update(buffer, file_name, "cursor")
-    end,
-  })
-
   if config.polite_mode then
     -- polite mode
     local keymap = config.keymaps.polite_suggestion
@@ -68,6 +56,18 @@ M.setup = function()
         end
         api.start()
       end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+    group = M.augroup,
+    callback = function(event)
+      local file_name = event["file"]
+      local buffer = event["buf"]
+      if not file_name or not buffer then
+        return
+      end
+      binary:on_update(buffer, file_name, "cursor")
     end,
   })
 
