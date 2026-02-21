@@ -21,7 +21,9 @@ M.setup = function()
   end, {})
 
   vim.api.nvim_create_user_command("SupermavenStatus", function()
-    log:trace(string.format("Supermaven is %s", api.is_running() and "running" or "not running"))
+    local message = string.format("Supermaven is %s", api.is_running() and "running" or "not running")
+    log:trace(message)
+    print(message)
   end, {})
 
   vim.api.nvim_create_user_command("SupermavenUseFree", function()

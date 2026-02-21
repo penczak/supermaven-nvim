@@ -1,6 +1,7 @@
 local binary = require("supermaven-nvim.binary.binary_handler")
-local preview = require("supermaven-nvim.completion_preview")
 local config = require("supermaven-nvim.config")
+local log = require("supermaven-nvim.logger")
+local preview = require("supermaven-nvim.completion_preview")
 
 local M = {
   augroup = nil,
@@ -9,6 +10,7 @@ local M = {
 M.setup = function()
   M.augroup = vim.api.nvim_create_augroup("supermaven", { clear = true })
 
+  print("polite_mode", config.polite_mode)
   vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI", "TextChangedP" }, {
     group = M.augroup,
     callback = function(event)
@@ -17,9 +19,42 @@ M.setup = function()
       if not file_name or not buffer then
         return
       end
+      print("text_changed file_name", file_name)
+      print("text_changed buffer", buffer)
       binary:on_update(buffer, file_name, "text_changed")
     end,
   })
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+    group = M.augroup,
+    callback = function(event)
+      local file_name = event["file"]
+      local buffer = event["buf"]
+      if not file_name or not buffer then
+        return
+      end
+      print("cursor_moved file_name", file_name)
+      print("cursor_moved buffer", buffer)
+      binary:on_update(buffer, file_name, "cursor")
+    end,
+  })
+
+  if config.polite_mode then
+    -- polite mode
+    local keymap = config.keymaps.polite_suggestion
+    if keymap == nil then
+      log:warn("polite mode is enabled but no keymap is set")
+      return
+    end
+    vim.keymap.set("i", keymap, function()
+      local file_name = vim.api.nvim_buf_get_name(0)
+      local buffer = vim.api.nvim_get_current_buf()
+      if not file_name or not buffer then
+        return
+      end
+      binary:on_update(buffer, file_name, "manual")
+    end, { silent = true })
+  end
 
   vim.api.nvim_create_autocmd({ "BufEnter" }, {
     callback = function(_)
@@ -38,18 +73,6 @@ M.setup = function()
         end
         api.start()
       end
-    end,
-  })
-
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    group = M.augroup,
-    callback = function(event)
-      local file_name = event["file"]
-      local buffer = event["buf"]
-      if not file_name or not buffer then
-        return
-      end
-      binary:on_update(buffer, file_name, "cursor")
     end,
   })
 
